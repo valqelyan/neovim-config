@@ -1,5 +1,20 @@
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
+    -- local map = function(keys, func, desc)
+    --   vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+    -- end
+    --
+    -- map("gl", vim.diagnostic.open_float, "Open Diagnostic Float")
+    -- map("K", vim.lsp.buf.hover, "Hover Documentation")
+    -- map("gs", vim.lsp.buf.signature_help, "Signature Documentation")
+    -- map("gD", vim.lsp.buf.declaration, "Goto Declaration")
+    -- map("<leader>la", vim.lsp.buf.code_action, "Code Action")
+    -- map("<leader>lr", vim.lsp.buf.rename, "Rename all references")
+    -- map("<leader>lf", vim.lsp.buf.format, "Format")
+    -- map("<leader>v", "<cmd>vsplit | lua vim.lsp.buf.definition()<cr>", "Goto Definition in Vertical Split")
+    --
+    vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
     -- enable completion when available
@@ -40,7 +55,7 @@ vim.keymap.set("i", "<cr>", function()
   return "<cr>"
 end, { expr = true })
 
-vim.lsp.config.lua_ls        = {
+vim.lsp.config.lua_ls = {
   cmd = { "lua-language-server" },
   filetypes = { "lua" },
   root_markers = { ".luarc.json", ".git", vim.uv.cwd() },
@@ -53,21 +68,21 @@ vim.lsp.config.lua_ls        = {
   },
 }
 
-vim.lsp.config.ts_ls         = {
+vim.lsp.config.ts_ls  = {
   cmd = { "typescript-language-server", "--stdio" },
-  filetypes = { "vue", "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
-  root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
-  init_options = {
-    hostInfo = "neovim",
-    plugins = {
-      {
-        name = "@vue/typescript-plugin",
-        location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
-        languages = { "javascript", "typescript", "vue" },
-      },
-    },
+  root_markers = {
+    "package.json",
   },
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+  }
 }
+
 
 vim.lsp.config.htmlls        = {
   cmd = { "vscode-html-language-server", "--stdio" },
@@ -105,6 +120,7 @@ vim.lsp.config.tailwindcssls = {
     "javascriptreact",
     "typescript",
     "typescriptreact",
+    "astro",
     "vue",
   },
   root_markers = {
