@@ -106,8 +106,8 @@ return {
     "nvim-mini/mini.surround",
     opts = {
       mappings = {
-        add = "ys", -- Add surrounding
-        delete = "ds", -- Delete surrounding
+        add = "ys",     -- Add surrounding
+        delete = "ds",  -- Delete surrounding
         replace = "cs", -- Replace surrounding
       },
     },
@@ -143,4 +143,13 @@ return {
       },
     },
   },
+
+  {
+    "lkzz/golden-ratio.nvim",
+    config = function()
+      local gr = require("golden-ratio")
+      gr.setup({})
+      gr.enable()
+    end
+  }
 }
