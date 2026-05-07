@@ -43,62 +43,84 @@ return {
   },
 
   {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-    config = function()
-      local harpoon = require("harpoon")
-
-      harpoon:setup()
-
-      vim.keymap.set("n", "mm", function()
-        harpoon:list():add()
-      end)
-
-      vim.keymap.set("n", "ml", function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end)
-
-      local function setup_harpoon_keymaps()
-        local map = vim.keymap.set
-        local list = harpoon:list()
-
-        for index, item in ipairs(list.items) do
-          local basename = item.value:match("[^/]+$")
-          local first_letter = basename:sub(1, 1)
-
-          if first_letter ~= "l" then
-            map("n", "m" .. first_letter, function()
-              harpoon:list():select(index)
-            end)
-          end
-        end
-      end
-
-      setup_harpoon_keymaps()
-
-      vim.keymap.set("n", "mr", setup_harpoon_keymaps)
-    end,
+    "okuuva/auto-save.nvim",
+    version = "^1.0.0",
+    cmd = "ASToggle",
+    event = { "InsertLeave", "TextChanged" },
+    opts = {},
   },
 
   { "wnkz/monoglow.nvim" },
+  --
+  -- {
+  --
+  --   "masisz/wisteria.nvim",
+  --   name = "wisteria",
+  --   opts = {
+  --     transparent = true,
+  --   },
+  -- },
 
   {
-
-    "masisz/wisteria.nvim",
-    name = "wisteria",
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
     opts = {
-      transparent = true,
+      highlight_overrides = {
+        all = function(colors)
+          return {
+            CursorLine = { bg = "#1e1830" },
+          }
+        end,
+      },
+      term_colors = true,
+      transparent_background = true,
+      dim_inactive = {
+        enabled = false,
+        shade = "dark",
+        percentage = 0.15,
+      },
+      integrations = {
+        cmp = true,
+        gitsigns = true,
+        treesitter = true,
+        harpoon = true,
+        telescope = true,
+        mason = true,
+        noice = true,
+        notify = true,
+        which_key = true,
+        fidget = true,
+        native_lsp = {
+          enabled = true,
+          virtual_text = {
+            errors = { "italic" },
+            hints = { "italic" },
+            warnings = { "italic" },
+
+            information = { "italic" },
+          },
+          underlines = {
+            errors = { "underline" },
+            hints = { "underline" },
+            warnings = { "underline" },
+            information = { "underline" },
+          },
+
+          inlay_hints = {
+            background = true,
+          },
+        },
+      },
+
+      flavour = "mocha",
     },
   },
 
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "wisteria",
+      colorscheme = "catppuccin",
     },
   },
 
@@ -106,8 +128,8 @@ return {
     "nvim-mini/mini.surround",
     opts = {
       mappings = {
-        add = "ys",     -- Add surrounding
-        delete = "ds",  -- Delete surrounding
+        add = "ys", -- Add surrounding
+        delete = "ds", -- Delete surrounding
         replace = "cs", -- Replace surrounding
       },
     },
@@ -121,7 +143,15 @@ return {
   {
     "max397574/better-escape.nvim",
     config = function()
-      require("better_escape").setup()
+      require("better_escape").setup({
+        mappings = {
+          t = {
+            j = {
+              k = false,
+            },
+          },
+        },
+      })
     end,
   },
 
@@ -130,19 +160,32 @@ return {
     opts = {
       keyboard_mode = true,
     },
+
     keys = {
       { "H", ":EagleWin<CR>", mode = "n", noremap = true, silent = true },
     },
   },
 
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      diagnostics = {
-        virtual_text = false,
-      },
+{
+  "neovim/nvim-lspconfig",
+  opts = {
+    autoformat = false,
+    diagnostics = {
+      virtual_text = false,
     },
   },
+  config = function(_, opts)  -- ← receive opts as second argument
+    -- Apply diagnostics config
+    vim.diagnostic.config(opts.diagnostics)
+
+    -- Your autocmd
+    vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function(args)
+        vim.keymap.del("n", "K", { buffer = args.buf })
+      end,
+    })
+  end,
+},
 
   {
     "lkzz/golden-ratio.nvim",
@@ -150,6 +193,22 @@ return {
       local gr = require("golden-ratio")
       gr.setup({})
       gr.enable()
-    end
-  }
+    end,
+  },
+
+  {
+    "homerours/jumper.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+    config = function()
+      -- If using Telescope as backend:
+      local jumper = require("telescope").extensions.jumper
+      -- -- or, if using fzf-lua as backend:
+      -- local jumper = require("jumper.fzf-lua")
+
+      -- Configure bindings to launch the pickers:
+      vim.keymap.set("n", "<leader>fu", jumper.find_in_files)
+    end,
+  },
 }

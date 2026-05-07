@@ -7,6 +7,9 @@ local keymap = vim.keymap -- for conciseness
 keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
+keymap.set("n", "J", "}", { desc = "jump to next paragraph" })
+keymap.set("n", "K", "{", { desc = "jump to prev paragraph" })
+
 vim.keymap.set("n", "<leader>cd", function()
   require("trouble").toggle("diagnostics")
 end, { desc = "Show diagnostics" })

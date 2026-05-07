@@ -9,24 +9,24 @@ if true then return {} end
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
 return {
-  { "wnkz/monoglow.nvim" },
-
-  {
-
-    "masisz/wisteria.nvim",
-    name = "wisteria",
-    opts = {
-      transparent = true,
-    },
-  },
+  -- { "wnkz/monoglow.nvim" },
+  --
+  -- {
+  --
+  --   "masisz/wisteria.nvim",
+  --   name = "wisteria",
+  --   opts = {
+  --     transparent = true,
+  --   },
+  -- },
 
   -- Configure LazyVim to load gruvbox
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "wisteria",
-    },
-  },
+  -- {
+  --   "LazyVim/LazyVim",
+  --   opts = {
+  --     colorscheme = "wisteria",
+  --   },
+  -- },
 
   -- change trouble config
   {
@@ -78,7 +78,6 @@ return {
       },
     },
   },
-
   -- add tsserver and setup with typescript.nvim instead of lspconfig
   -- {
   --   "neovim/nvim-lspconfig",
@@ -117,6 +116,7 @@ return {
         "bash",
         "html",
         "javascript",
+        "css",
         "json",
         "lua",
         "markdown",

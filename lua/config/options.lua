@@ -20,6 +20,8 @@ opt.shortmess = opt.shortmess + "c"
 opt.pumblend = 0
 
 g.snacks_animate = false
+opt.fileformats = "unix,dos,mac"
+g.autoformat = false
 
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "*",
@@ -28,3 +30,5 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
   end,
 })
+
+opt.clipboard = "unnamedplus"
